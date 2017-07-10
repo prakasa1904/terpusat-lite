@@ -1,0 +1,36 @@
+{
+  "name": "terpusat-lite",
+  "version": "0.0.1 BETA",
+  "description": "Terpusat Lite Edition",
+  "main": "index.js",
+  "repository": "team@terpusat.com:/data/git_repository/terpusat-lite",
+  "author": "N.A Prakasa",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "html-webpack-plugin": "^2.29.0",
+    "path": "^0.12.7",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpack": "^3.1.0",
+    "webpack-dev-server": "^2.5.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "image-webpack-loader": "^3.3.1",
+    "style-loader": "^0.18.2",
+    "sw-precache-webpack-plugin": "^0.11.4",
+    "url-loader": "^0.5.9"
+  }
+}

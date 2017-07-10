@@ -1,0 +1,7 @@
+.lazy-load__container {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    height: auto;
+    width: 100%;
+}
