@@ -1,0 +1,5 @@
+.DS_STORE
+*.log
+*.orig
+.happypack
+node_modules
