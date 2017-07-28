@@ -24,7 +24,9 @@
     "express": "^4.15.3",
     "path": "^0.12.7",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -41,6 +43,7 @@
     "html-webpack-plugin": "^2.29.0",
     "image-webpack-loader": "^3.3.1",
     "nodemon": "^1.11.0",
+    "redbox-react": "^1.4.3",
     "style-loader": "^0.18.2",
     "sw-precache-webpack-plugin": "^0.11.4",
     "url-loader": "^0.5.9",

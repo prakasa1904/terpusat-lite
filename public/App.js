@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import logo from './logo.svg'
 
 class App extends Component {
   render() {
@@ -17,4 +18,9 @@ class App extends Component {
   }
 }
 
-export default App;
+const AppData = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
+
+export default AppData

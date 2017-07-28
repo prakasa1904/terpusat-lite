@@ -6,12 +6,10 @@ import {
   __TEST__,
   __PROD__,
   PORT
-} from './config'
+} from './../config'
 import webpackConfig from '../build/webpack.config'
 
 const app = express()
-
-//app.get('/', (req, res) => res.end('ok'))
 
 if (__DEV__) {
   const compiler = webpack(webpackConfig)
@@ -34,9 +32,18 @@ if (__DEV__) {
 
   // serve the generated service-worker file
   app.get('/service-worker.js', (req, res) => {
-    res.sendFile(`path.resolve('dist')}/service-worker.js`)
+    res.sendFile(`${path.resolve('dist')}/service-worker.js`)
   })
+} else {
+  // Serving ~/dist by default. Ideally these files should be served by
+  // the web server and not the app server, but this helps to demo the
+  // server in production.
+  app.use(express.static(path.resolve('static')))
 }
+
+app.use((err, req, res, next) => {
+  next(err)
+})
 
 if (!PORT) {
   throw new Error('env PORT is undefined')

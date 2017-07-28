@@ -5,6 +5,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+
+const config = require('../config')
+const {
+  __DEV__,
+  __PROD__,
+  __TEST__,
+} = config
+
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   favicon: './public/img/favicon.ico',
   template: './public/index.html',
@@ -21,14 +29,7 @@ const CopyWebpackPluginConfig = new CopyWebpackPlugin(
       from: 'static', 
       to: 'assets'
     }
-  ])
-const UglifyJsPluginConfig = new UglifyJsPlugin({
-  compress: {
-    warnings: false,
-    unused: true,
-    dead_code: true,
-  },
-})
+])
 const SWPrecacheWebpackPluginConfig = new SWPrecacheWebpackPlugin({
   cacheId: '[name]-cache-v1',
   dontCacheBustUrlsMatching: /\.\w{8}\./,
@@ -38,16 +39,49 @@ const SWPrecacheWebpackPluginConfig = new SWPrecacheWebpackPlugin({
   staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
 })
 
+const arrOfPlugins = [
+  HtmlWebpackPluginConfig,
+  ExtractTextPluginConfig,
+  CopyWebpackPluginConfig,
+  SWPrecacheWebpackPluginConfig
+]
+if (__PROD__) {
+  const UglifyJsPluginConfig = new UglifyJsPlugin({
+    compress: {
+      warnings: false,
+      unused: true,
+      dead_code: true,
+    },
+  })
+  arrOfPlugins.push(UglifyJsPluginConfig)
+}
+
+if (__DEV__) {
+  arrOfPlugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  )
+}
+
 module.exports = {
-  entry: './public/index.js',
+  entry: __DEV__ 
+  ? 
+  ('./public/index.js').concat('?webpack-hot-middleware/client?path=/__webpack_hmr') : 
+    './public/index.js',
   output: {
     path: path.resolve('dist'),
     filename: '[name].[hash].js'
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+      {
+        test: /\.(js|jsx|flow)$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          cacheDirectory: __DEV__ ? '.babelCache' : false
+        }
+      }
     ],
     rules: [
       {
@@ -105,11 +139,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    HtmlWebpackPluginConfig,
-    ExtractTextPluginConfig,
-    CopyWebpackPluginConfig,
-    UglifyJsPluginConfig,
-    SWPrecacheWebpackPluginConfig
-  ]
+  plugins: arrOfPlugins
 }

@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import GeneralHeader from '../components/GeneralHeader';
-import MainContent from '../components/MainContent';
+import React, { Component } from 'react'
+import { object } from 'prop-types'
+import { Provider } from 'react-redux'
+import GeneralHeader from '../components/GeneralHeader'
+import MainContent from '../components/MainContent'
 
 class AppContainer extends Component {
-
   state = {
     pageTitle: 'Lokasi Anda Jakarta',
     pageDescription: 'Pusat Data Regional Jakarta',
