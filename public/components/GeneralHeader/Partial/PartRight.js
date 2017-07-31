@@ -1,40 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
 class PartRight extends Component {
-  componentDidMount () {
-    window.addEventListener('click', this.handleDocumentClick)
-  }
-
-  handleDocumentClick = (event) => {
-    console.log(event.target.nodeName.toLowerCase())
-    // console.log(event.target.id)
-    // if ( event.target.id !=== 'topTxtSearch' && event.target.id !=== 'topTxtSearch' ){
-    //
-    // }
-    // const HIDE_ME = ReactDOM.findDOMNode(this.refs.hideMe);
-    //
-    // if ( !HIDE_ME.contains(event.target) ){
-    //   this.props.searchHandleOnClick('media-body h-search')
-    // }
-    if(
-      this.refs.topOptions.className === 'dropdown hm-profile open' &&
-      event.target.id !== 'topOptions'
-    ){
-      console.log('AB Test')
-      // this.setState({
-      //   profileOption: false,
-      // })
-      // console.log(this.refs.topOptions.className)
-      // console.log(event.target.id)
-      // this.setState({
-      //   profileOption: false
-      // })
-      //this.iconProfileHandleOnClick(event)
-    }else{
-      console.log('First Here')
-    }
-  }
-
   static PropTypes = {
     optionItem: PropTypes.object
   }

@@ -1,25 +1,8 @@
 import { combineReducers } from 'redux'
-import {
-  INCREMENT_ID
-} from './actions'
+import main from './main'
 
-const initialState = {
-  id: 0,
-}
-
-function mainApps(state = initialState, action) {
-  switch (action.type) {
-    case INCREMENT_ID:
-      return {...state, ...{id: action.id}}
-    default:
-      return state
-  }
-}
-
-const reducers = combineReducers(
-  {
-    main: mainApps
-  }
-)
+const reducers = combineReducers({
+  main
+})
 
 export default reducers

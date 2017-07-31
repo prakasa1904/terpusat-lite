@@ -1,28 +1,43 @@
 import React, { Component } from 'react'
-import { object } from 'prop-types'
-import { Provider } from 'react-redux'
+import { func, object } from 'prop-types'
+import { connect } from 'react-redux'
+
+import {
+  increaseID
+} from '../../store/main'
+
 import GeneralHeader from '../components/GeneralHeader'
 import MainContent from '../components/MainContent'
 
 class AppContainer extends Component {
+  static propsTypes = {
+    increaseID: func,
+  }
   state = {
-    pageTitle: 'Lokasi Anda Jakarta',
-    pageDescription: 'Pusat Data Regional Jakarta',
-    sidebarStatus: '',
+    pageTitle: 'Terpusat Lite',
+    pageDescription: 'Referensi Pusat Data Regional',
     topOptionStatus: 'dropdown hm-profile',
   }
 
-  topProfileHandleOnClick =(topOptionStatus) => {
-    this.setState({
-      topOptionStatus: topOptionStatus
-    })
+  componentDidMount = () => {
+    window.addEventListener('click', this.handleBodyClick)
+    this.props.increaseID(4)
   }
 
-  sidebarHandleOnClick = (sidebarStatus) => {
-    this.setState({
-      sidebarStatus: sidebarStatus
-    })
+  handleBodyClick = () => {
+    
   }
+  // topProfileHandleOnClick =(topOptionStatus) => {
+  //   this.setState({
+  //     topOptionStatus: topOptionStatus
+  //   })
+  // }
+
+  // sidebarHandleOnClick = (sidebarStatus) => {
+  //   this.setState({
+  //     sidebarStatus: sidebarStatus
+  //   })
+  // }
 
   render() {
     return (
@@ -41,4 +56,17 @@ class AppContainer extends Component {
   }
 }
 
-export default AppContainer;
+const mapStateToProps = state => ({
+  id: state.main ? state.main.id : state.id,
+})
+
+const mapDispatchToProps = {
+  increaseID,
+}
+
+const AppContainerStore = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppContainer)
+
+export default AppContainerStore
