@@ -13,10 +13,6 @@
   "betterScripts": {
     "start": {
       "command": "nodemon --exec babel-node -- ./server --source-maps",
-      "env": {
-        "NODE_ENV": "development",
-        "PORT": 4000
-      }
     }
   },
   "dependencies": {
