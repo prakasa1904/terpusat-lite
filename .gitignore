@@ -3,5 +3,3 @@
 *.orig
 .happypack
 node_modules
-
-.env
