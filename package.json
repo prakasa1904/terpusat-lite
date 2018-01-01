@@ -12,7 +12,7 @@
   },
   "betterScripts": {
     "start": {
-      "command": "nodemon --exec babel-node -- ./server --source-maps",
+      "command": "nodemon --exec babel-node -- ./server --source-maps"
     }
   },
   "dependencies": {
