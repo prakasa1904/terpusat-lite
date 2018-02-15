@@ -1,3 +1,3 @@
-import GeneralHeader from './GeneralHeader'
+import GeneralHeader from './GeneralHeader';
 
-export default GeneralHeader
+export default GeneralHeader;
