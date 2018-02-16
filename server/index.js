@@ -1,12 +1,12 @@
+import config from 'config';
 import path from 'path';
 import webpack from 'webpack';
 import express from 'express';
-import { __DEV__, __TEST__, __PROD__, PORT } from './../config';
 import webpackConfig from '../build/webpack.config';
 
 const app = express();
 
-if (__DEV__) {
+if (config.isDevel) {
   const compiler = webpack(webpackConfig);
 
   app.use(
@@ -43,9 +43,9 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-if (!PORT) {
+if (!config.port) {
   throw new Error('env PORT is undefined');
 }
 
-app.listen(PORT);
-console.log(`App is now running at http://localhost:${PORT}.`); // eslint-disable-line no-console
+app.listen(config.port);
+console.log(`App is now running at http://localhost:${config.port}.`); // eslint-disable-line no-console

@@ -11,7 +11,7 @@ class GeneralHeader extends Component {
   };
 
   static defaultProps = {
-    title: 'Tokopedia',
+    title: 'Terpusat',
     desc: 'Make It Happen',
     searchPlaceHolder: 'Cari Orang, tempat atau aktivitas',
   };
