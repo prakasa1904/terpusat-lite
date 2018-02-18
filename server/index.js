@@ -8,7 +8,7 @@ const app = express();
 
 if (config.isDevel) {
   const compiler = webpack(webpackConfig);
-
+  
   app.use(
     require('webpack-dev-middleware')(compiler, {
       // eslint-disable-line global-require
