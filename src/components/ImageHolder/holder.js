@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
-import './holder.css'
-import Image from './image'
+import React, { Component } from 'react';
+import './holder.css';
+import Image from './image';
 
 class Index extends Component {
   state = {
     showImage: false,
-  }
+  };
 
   propTypes: {
     showImage: React.PropTypes.bool,
-  }
+  };
 
   defaultProps = {
     showImage: false,
-  }
+  };
 
   componentWillMount() {
     if (this.props.showImage) {
-      this.setShowImage(true)
+      this.setShowImage(true);
     }
   }
 
@@ -26,23 +26,23 @@ class Index extends Component {
       return;
     }
 
-    var min = this.props.viewport.top
-    var max = this.props.viewport.top + this.props.viewport.height
-// console.log('Berapa sih min ' + min + ' top + height ' + (top + height) + ' === top ' + top + ' max - 100 ' + (max - 100)) 
-    if ((min <= (top + height) && top <= (max - 100))) {
-      this.setShowImage(true)
+    var min = this.props.viewport.top;
+    var max = this.props.viewport.top + this.props.viewport.height;
+    // console.log('Berapa sih min ' + min + ' top + height ' + (top + height) + ' === top ' + top + ' max - 100 ' + (max - 100))
+    if (min <= top + height && top <= max - 100) {
+      this.setShowImage(true);
     }
-  }
+  };
 
-  setShowImage = (show) => {
+  setShowImage = show => {
     this.setState({
-      showImage: !!(show)
-    })
-  }
+      showImage: !!show,
+    });
+  };
 
   render() {
     return (
-      <div className='lazy-load__container'>
+      <div className="lazy-load__container">
         <Image
           src={this.props.image}
           alt={this.props.title}
@@ -51,8 +51,8 @@ class Index extends Component {
           updateImagePosition={this.updateImagePosition}
         />
       </div>
-    )
+    );
   }
 }
 
-export default Index
+export default Index;

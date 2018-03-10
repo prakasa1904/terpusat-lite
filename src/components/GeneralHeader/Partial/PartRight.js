@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { arrayOf, object } from 'prop-types';
 
 class PartRight extends Component {
-  static PropTypes = {
-    optionItem: PropTypes.object,
+  static propTypes = {
+    optionItem: arrayOf(object),
   };
 
   static defaultProps = {

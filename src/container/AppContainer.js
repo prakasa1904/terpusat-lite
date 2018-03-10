@@ -8,7 +8,7 @@ import GeneralHeader from '../components/GeneralHeader';
 import MainContent from '../components/MainContent';
 
 class AppContainer extends Component {
-  static propsTypes = {
+  static propTypes = {
     increaseID: func,
   };
   state = {

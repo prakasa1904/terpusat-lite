@@ -1,90 +1,140 @@
-import config from 'config';
 import path from 'path';
+import config from 'config';
 import webpack from 'webpack';
+import appRootDir from 'app-root-dir';
 
-import arrOfPlugins, { ExtractTextPluginConfig } from './default.plugin';
-import productionPlugin from './production.plugin';
-import developmentPlugin from './development.plugin';
+import pkg from '../package.json';
+import { ifElse } from '../src/helpers';
+import progressHandler from './helpers/progress';
+import serverWebpackConfig from './server.webpack.config';
+import clientWebpackConfig from './client.webpack.config';
+import styleConfig from './style.webpack.config';
 
-productionPlugin(webpack, arrOfPlugins);
-developmentPlugin(webpack, arrOfPlugins);
+const isDev = config.isDevel;
+const isProd = config.isProd;
+const isVerbose = process.argv.includes('--verbose');
+const isAnalyze = process.argv.includes('--analyze') || process.argv.includes('--analyse');
 
-module.exports = {
-  entry: config.isDevel
-    ? './public/index.js'.concat('?webpack-hot-middleware/client?path=/__webpack_hmr')
-    : './public/index.js',
+const ifDev = ifElse(isDev);
+const ifProd = ifElse(isProd);
+const ifAnalyze = ifElse(isAnalyze);
+
+const mainConfig = ({ isClient }) => ({
   output: {
-    path: path.resolve('dist'),
-    filename: '[name].[hash].js',
+    publicPath: config.build.path,
+    pathinfo: isVerbose,
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+    modules: ['node_modules'],
+    symlinks: false,
+    cacheWithContext: false,
   },
   module: {
-    loaders: [
-      {
-        test: /\.(js|jsx|flow)$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          cacheDirectory: config.isDevel ? '.babelCache' : false,
-        },
-      },
-    ],
     rules: [
       {
-        enforce: 'pre',
-        test: /\.(js|jsx|flow)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [
           {
             loader: 'babel-loader',
+            options: {
+              cacheDirectory: isDev,
+              babelrc: false,
+              presets: [
+                [
+                  'env',
+                  {
+                    targets: {
+                      ...(!isClient
+                        ? { node: pkg.engines.node.match(/(\d+\.?)+/)[0] }
+                        : { browsers: pkg.browserslist }),
+                    },
+                    modules: false,
+                    useBuiltIns: true,
+                  },
+                ],
+                'stage-0',
+                'react',
+                ...ifProd(['react-optimize'], []),
+              ],
+              plugins: [
+                'transform-decorators-legacy',
+                'react-loadable/babel',
+                'lodash',
+                'emotion',
+                ...ifDev(['transform-react-jsx-self', 'transform-react-jsx-source'], []),
+                ...ifDev(isClient ? ['react-hot-loader/babel'] : [], []),
+              ],
+            },
           },
         ],
       },
       {
-        test: /\.css$/,
-        use: ExtractTextPluginConfig.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                url: false,
-                import: false,
-                minimize: true,
-              },
-            },
-          ],
-          fallback: 'style-loader',
-        }),
-      },
-      {
-        test: /\.(otf|ttf|eot|woff|woff2)$/,
-        loader: 'file-loader?name=fonts/[name].[ext]',
-      },
-      {
-        test: /\.jpg$/,
-        loader: 'url-loader',
-      },
-      {
-        test: /\.png$/,
+        test: /\.(eot|ttf|woff|woff2)$/,
         use: [
           {
             loader: 'url-loader',
-          },
-          {
-            loader: 'image-webpack-loader',
             options: {
-              pngquant: {
-                quality: '30',
-                speed: 1,
-              },
+              limit: 1024,
+              emitFile: isClient,
             },
           },
         ],
       },
       {
-        test: /\.svg(\?.*)?$/,
-        loader: 'url-loader',
+        test: /\.(png|jpe?g|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              limit: 1024,
+              name: ifDev('[name].[ext]', '[hash:8].[ext]'),
+              emitFile: isClient,
+            },
+          },
+        ],
       },
+      // Exclude dev modules from production build
+      ...ifProd(
+        [
+          {
+            test: path.resolve(appRootDir.get(), './node_modules/react-deep-force-update/lib/index.js'),
+            use: 'null-loader',
+          },
+        ],
+        [],
+      ),
     ],
   },
-  plugins: arrOfPlugins,
+  plugins: [
+    [new webpack.ProgressPlugin({ handler: progressHandler })],
+    new webpack.DefinePlugin({
+      globals: JSON.stringify(config),
+    }),
+  ],
+  bail: isProd,
+  stats: 'minimal',
+});
+
+const pushIntoWebpackConfig = {
+  path,
+  appRootDir,
+  webpack,
+  ifDev,
+  ifProd,
+  ifAnalyze,
+  isDev,
+  isProd,
+  isAnalyze,
+  isVerbose,
+  mainConfig,
+  styleConfig,
 };
+
+const configs = [
+  clientWebpackConfig(pushIntoWebpackConfig), 
+  clientWebpackConfig(pushIntoWebpackConfig)
+];
+
+export default configs;

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import './style/google-material-color/palette.css';
-import './style/material-design-iconic-font/css/material-design-iconic-font.css';
-import './style/app.css';
+import './styles/google-material-color/palette.css';
+import './styles/material-design-iconic-font/css/material-design-iconic-font.css';
+import './styles/app.css';
 import store from './../store';
 import App from './container/AppContainer';
 

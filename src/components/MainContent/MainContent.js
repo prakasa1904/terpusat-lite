@@ -1,15 +1,16 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ImageHolder from '../ImageHolder';
 
 const style = { height: '500px' };
 
 class MainContent extends Component {
-  defaultProps = {
+  static defaultProps = {
     sectionId: 'main',
   };
 
-  static PropTypes = {
-    children: React.PropTypes.node,
+  static propTypes = {
+    children: PropTypes.node,
     sectionId: PropTypes.string,
   };
 
