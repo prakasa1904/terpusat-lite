@@ -81,6 +81,7 @@ async function start() {
   let appPromise
   let appPromiseResolve
   let appPromiseIsResolved = true
+
   serverCompiler.plugin('compile', () => {
     if (!appPromiseIsResolved) {
       return
@@ -121,9 +122,9 @@ async function start() {
         if (['abort', 'fail'].includes(app.hot.status())) {
           console.warn('[HMR] Cannot apply update.')
           console.warn('[HMR] Reloading server.js...')
-          delete require.cache[require.resolve('../src/server')]
+          delete require.cache[require.resolve('../public/server')]
           // eslint-disable-next-line global-require, import/no-unresolved
-          app = require('../src/server').default;
+          app = require('../public/server').default;
           console.warn('[HMR] App has been reloaded.')
         } else {
           console.warn(`[HMR] Update failed: ${error.stack || error.message}`)
@@ -149,7 +150,7 @@ async function start() {
 
   // Load compiled src/server.js as a middleware
   // eslint-disable-next-line global-require, import/no-unresolved
-  app = require('../src/server').default
+  app = require('../public/server').default
   appPromiseIsResolved = true
   appPromiseResolve()
 
@@ -162,17 +163,11 @@ async function start() {
     middleware: [server],
     open: !process.argv.includes('--silent') ? 'external' : false,
     ...isDebug ? {} : { notify: false, ui: true },
-  }, (error, bs) => (error ? reject(error) : resolve(bs)))
-  )
+  }, (error, bs) => (error ? reject(error) : resolve(bs))))
 
   const timeEnd = new Date()
   const time = timeEnd.getTime() - timeStart.getTime()
   console.info(`[${format(timeEnd)}] Server launched after ${time} ms`)
-
-  if (process.env.CIRCLECI) {
-    // Circle CI Build Success
-    process.exit(0);
-  }
 
   return server
 }

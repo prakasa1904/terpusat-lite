@@ -13,11 +13,11 @@ import winston from 'winston';
 export const dnsPrefetchControl = (control) => {
   return (req, res, next) => {
     res.setHeader('X-DNS-Prefetch-Control', control);
-    next()
+    next();
   }
 };
 
-export default ({ app, express } ) => {
+export default ({ app, express }) => {
   const __PROD__ = config.isProd;
   const RedisStore = connectRedis(session);
 
@@ -77,5 +77,5 @@ export default ({ app, express } ) => {
   }
 
   app.use(dnsPrefetchControl('on'));
-  //app.use(favicon(pathResolve(appRootDir.get(), './public/statics/images', 'favicon.ico')));
+  app.use(favicon(pathResolve(appRootDir.get(), './public/assets/images', 'favicon.ico')));
 };

@@ -38,7 +38,7 @@ export default ({
       rules: mainConfig({ isClient: false }).module.rules.concat([
         {
           test: /\.less$/,
-          use: styleConfig({ isClient: false }).slice(1),
+          use: styleConfig({ isClient: true }).slice(1),
         },
         {
           test: /\.css$/,
@@ -53,6 +53,12 @@ export default ({
         whitelist: [/\.(css|less|scss|sss)$/i, ...ifProd(['source-map-support/register'], [])],
       }),
     ],
+    optimization: {
+      minimize: isProd,
+      runtimeChunk: {
+        name: 'server-terpusat'
+      },
+    },
     plugins: [
       ...mainConfig({ isClient: false }).plugins,
       new webpack.DefinePlugin({
@@ -66,25 +72,21 @@ export default ({
         __DISABLE_SSR__: isAnalyze,
         __DEVTOOLS__: isVerbose,
       }),
-      // new CopyWebpackPlugin([
-      //   {
-      //     from: path.resolve(appRootDir.get(), './statics'),
-      //     to: path.resolve(appRootDir.get(), './public/assets'),
-      //   },
-      //   {
-      //     from: path.resolve(appRootDir.get(), './src/amp/views'),
-      //     to: path.resolve(appRootDir.get(), './public/amp/views'),
-      //   }
-      // ]),
-      ...ifProd([new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })], []),
-      ...ifDev(
-        [
-          new webpack.NamedModulesPlugin(),
-          new webpack.HotModuleReplacementPlugin(),
-          new webpack.NoEmitOnErrorsPlugin()
-        ],
-        [],
-      ),
+      new CopyWebpackPlugin([
+        {
+          from: path.resolve(appRootDir.get(), './statics'),
+          to: path.resolve(appRootDir.get(), './public/assets'),
+        },
+      ]),
+      //...ifProd([new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })], []),
+      // ...ifDev(
+      //   [
+      //     new webpack.NamedModulesPlugin(),
+      //     new webpack.HotModuleReplacementPlugin(),
+      //     new webpack.NoEmitOnErrorsPlugin()
+      //   ],
+      //   [],
+      // ),
     ],
     node: {
       console: false,

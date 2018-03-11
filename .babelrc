@@ -1,4 +1,23 @@
 {
-  "presets": ["env", "react", "stage-0"],
+  "presets": [
+    "react",
+    "stage-0",
+    "es2015",
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            ">1% in ID",
+            "last 5 versions",
+            "Firefox ESR",
+            "not ie < 8",
+            "safari >= 7",
+            "last 7 years"
+          ]
+        }
+      }
+    ]
+  ],
   "plugins": ["add-module-exports", "transform-decorators-legacy"]
 }

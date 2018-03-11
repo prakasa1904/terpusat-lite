@@ -73,7 +73,7 @@ export default ({
     optimization: {
       minimize: isProd,
       runtimeChunk: {
-        name: 'vendors'
+        name: 'terpusat'
       },
       splitChunks: {
         cacheGroups: {

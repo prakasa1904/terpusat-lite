@@ -1,29 +1,24 @@
 import React from 'react';
-import { object, oneOfType, array } from 'prop-types';
-import { Provider } from 'react-redux';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
-import { ConnectedRouter } from 'react-router-redux';
-import { renderRoutes } from 'react-router-config';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch
+} from 'react-router-dom';
 
-// RR3
-//import { Router } from 'react-router';
+import { Dashboard } from './routes';
 
+export default (props) => {
+  const { pokemon } = props;
 
-const App = ({ client, store, routerProps }) => {
   return (
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        Nedya Amrih Prakasa
-        {/* <Router {...routerProps} /> */}
-      </ConnectedRouter>
-    </Provider>
-  );
+    <div>
+      Your SSR React Router Node App initialised with data!
+      <Switch>
+        <Route path="/" exact component={Dashboard} />
+        {/* <Route path="/pokemon" exact render={() => (<Redirect to="/pokemon/ability/telepathy" />)} />
+                <Route path="/pokemon/ability/:ability" render={(location) => (<List pokemon={pokemon.list} location={location} />)} /> */}
+      </Switch>
+    </div>
+  )
 };
-
-App.propTypes = {
-  client: object.isRequired,
-  store: object.isRequired,
-  routerProps: oneOfType([object, array]),
-};
-
-export default App;

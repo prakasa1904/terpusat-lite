@@ -1,5 +1,7 @@
 .DS_STORE
 *.log
 *.orig
+public
 .happypack
 node_modules
+.babelrc___old

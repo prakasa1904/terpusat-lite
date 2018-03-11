@@ -8,19 +8,14 @@ import Loadable from 'react-loadable';
 
 import initMiddleware from './middleware/initialMiddleware';
 //import authMiddleware from './middleware/auth';
-//import universalRender from './middleware/universal-render';
+import universalMiddleware from './middleware/universalMiddleware';
 
 winston.info('Starting server...');
 
 const __PROD__ = config.isProd;
 const app = express(); initMiddleware({ app, express });
 
-
-console.log('========== __PROD__ ==========')
-console.log(__PROD__)
-console.log('========== __PROD__ ==========')
-//app.use(universalRender);
-app.use((req, res, next) => res.end('ok'));
+app.use(universalMiddleware);
 
 process.on('SIGINT', () => {
   winston.info('Received SIGINT exiting');

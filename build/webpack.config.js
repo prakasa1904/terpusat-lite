@@ -3,7 +3,7 @@ import config from 'config';
 import webpack from 'webpack';
 import appRootDir from 'app-root-dir';
 
-import pkg from '../package.json';
+import pkg from './../package.json';
 import { ifElse } from '../src/helpers';
 import progressHandler from './helpers/progress';
 import serverWebpackConfig from './server.webpack.config';
@@ -62,7 +62,7 @@ const mainConfig = ({ isClient }) => ({
               plugins: [
                 'transform-decorators-legacy',
                 'react-loadable/babel',
-                'lodash',
+                'babel-plugin-lodash',
                 'emotion',
                 ...ifDev(['transform-react-jsx-self', 'transform-react-jsx-source'], []),
                 ...ifDev(isClient ? ['react-hot-loader/babel'] : [], []),
@@ -135,7 +135,7 @@ const pushIntoWebpackConfig = {
 
 const configs = [
   clientWebpackConfig(pushIntoWebpackConfig), 
-  clientWebpackConfig(pushIntoWebpackConfig)
+  serverWebpackConfig(pushIntoWebpackConfig)
 ];
 
 export default configs;
