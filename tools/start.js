@@ -1,18 +1,18 @@
+import path from 'path';
+import express from 'express';
+import webpack from 'webpack';
+import { host, port } from 'config';
+import browserSync from 'browser-sync';
+import logApplyResult from 'webpack/hot/log-apply-result';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+// import createLaunchEditorMiddleware from 'react-error-overlay/middleware';
 
-import browserSync from 'browser-sync'
-import { host, port } from 'config'
-import express from 'express'
-import path from 'path'
-import createLaunchEditorMiddleware from 'react-error-overlay/middleware'
-import webpack from 'webpack'
-import logApplyResult from 'webpack/hot/log-apply-result'
-import webpackDevMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import webpackConfig from './../build/webpack.config'
-import run, { format } from './run'
-import clean from './clean'
+import webpackConfig from './../build/webpack.config';
+import run, { format } from './run';
+import clean from './clean';
 
-const isDebug = !process.argv.includes('--release')
+const isDebug = !process.argv.includes('--release');
 
 // https://webpack.js.org/configuration/watch/#watchoptions
 const watchOptions = {
@@ -53,13 +53,14 @@ async function start() {
     return server
   }
   server = express()
-  server.use(createLaunchEditorMiddleware())
+  // server.use(createLaunchEditorMiddleware())
   server.use(express.static(path.resolve(__dirname, '../statics')))
 
   const [clientConfig, serverConfig] = webpackConfig
 
   // Configure compilation
   await run(clean)
+
   const clientCompiler = webpack(clientConfig)
   const serverCompiler = webpack(serverConfig)
   const clientPromise = createCompilationPromise('client', clientCompiler, clientConfig)
@@ -89,9 +90,11 @@ async function start() {
   })
 
   let app
-  server.use((req, res) => {
-    appPromise.then(() => app.handle(req, res)).catch(error => console.error(error))
-  })
+  if (app) {
+    server.use((req, res) => {
+      appPromise.then(() => app.handle(req, res)).catch(error => console.error(error))
+    })
+  }
 
   function checkForUpdate(fromUpdate) {
     if (app.hot.status() === 'idle') {
@@ -115,13 +118,12 @@ async function start() {
         return console.warn('[HMR] Cannot find update.')
       })
       .catch(error => {
-        console.error(error)
         if (['abort', 'fail'].includes(app.hot.status())) {
           console.warn('[HMR] Cannot apply update.')
           console.warn('[HMR] Reloading server.js...')
-          delete require.cache[require.resolve('../public/server')]
+          delete require.cache[require.resolve('../src/server')]
           // eslint-disable-next-line global-require, import/no-unresolved
-          app = require('../public/server').default;
+          app = require('../src/server').default;
           console.warn('[HMR] App has been reloaded.')
         } else {
           console.warn(`[HMR] Update failed: ${error.stack || error.message}`)
@@ -147,7 +149,7 @@ async function start() {
 
   // Load compiled src/server.js as a middleware
   // eslint-disable-next-line global-require, import/no-unresolved
-  app = require('../public/server').default
+  app = require('../src/server').default
   appPromiseIsResolved = true
   appPromiseResolve()
 

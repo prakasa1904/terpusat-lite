@@ -30,7 +30,6 @@ export default ({
     },
     entry: {
       client: [
-        'babel-polyfill',
         ...ifDev(
           ['react-error-overlay', 'react-hot-loader/patch', 'webpack-hot-middleware/client?name=client&reload=true'],
           [],
@@ -40,7 +39,7 @@ export default ({
     },
     output: {
       ...mainConfig({ isClient: true }).output,
-      path: path.resolve(appRootDir.get(), './public/assets/'),
+      path: path.resolve(appRootDir.get(), './public/'),
       filename: ifDev('[name].js', '[name].[chunkhash].js'),
       chunkFilename: ifDev('chunk.[name].js', 'chunk.[name].[chunkhash].js'),
       crossOriginLoading: 'anonymous',
@@ -71,6 +70,23 @@ export default ({
         },
       ],
     },
+    optimization: {
+      minimize: isProd,
+      runtimeChunk: {
+        name: 'vendors'
+      },
+      splitChunks: {
+        cacheGroups: {
+          default: false,
+          commons: {
+            test: /node_modules/,
+            name: "vendors",
+            chunks: "initial",
+            minSize: 1
+          }
+        }
+      }
+    },
     plugins: [
       ...mainConfig({ isClient: true }).plugins,
       new webpack.DefinePlugin({
@@ -84,30 +100,9 @@ export default ({
         __DEVELOPMENT__: isDev,
         __DEVTOOLS__: isVerbose,
       }),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendors',
-        minChunks: module => module.context && module.context.includes('node_modules'),
-      }),
-      new ExtractTextPlugin({
-        filename: ifDev('[name].css', '[name].[contenthash:8].css'),
-        allChunks: true,
-      }),
       ...ifDev([new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin()], []),
       ...ifProd(
         [
-          new webpack.optimize.ModuleConcatenationPlugin(),
-          new webpack.optimize.UglifyJsPlugin({
-            sourceMap: useSourceMap,
-            parallel: true,
-            cache: true,
-            compress: {
-              warnings: false,
-            },
-            output: {
-              comments: false,
-              beautify: false,
-            },
-          }),
           new SWPrecacheWebpackPlugin({
             minify: true,
             cacheId: 'terpusat-sw-cache-v1',
@@ -135,14 +130,12 @@ export default ({
       ),
       new AssetsPlugin({
         filename: 'assets.json',
-        path: path.resolve(appRootDir.get(), './build'),
+        path: path.resolve(appRootDir.get(), './public'),
       }),
-
       // Webpack Bundle Analyzer
       // https://github.com/th0r/webpack-bundle-analyzer
       ...ifAnalyze([new BundleAnalyzerPlugin()], []),
     ],
-
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
     // https://webpack.github.io/docs/configuration.html#node

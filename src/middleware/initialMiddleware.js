@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import favicon from 'serve-favicon';
 import morgan from 'morgan';
 import session from 'express-session';
-import session from 'express-session';
 import useragent from 'express-useragent';
 import winston from 'winston';
 
@@ -18,7 +17,7 @@ export const dnsPrefetchControl = (control) => {
   }
 };
 
-export default (app) => {
+export default ({ app, express } ) => {
   const __PROD__ = config.isProd;
   const RedisStore = connectRedis(session);
 
@@ -78,5 +77,5 @@ export default (app) => {
   }
 
   app.use(dnsPrefetchControl('on'));
-  app.use(favicon(pathResolve(appRootDir.get(), './public/statics/images', 'favicon.ico')));
+  //app.use(favicon(pathResolve(appRootDir.get(), './public/statics/images', 'favicon.ico')));
 };

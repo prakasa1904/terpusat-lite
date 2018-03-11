@@ -47,7 +47,7 @@ config.redis = {
   }
 }
 config.build = {
-  path: `${config.app.hostname}/assets/`,
+  path: `${config.app.hostname}/`,
 }
 
 module.exports = config;

@@ -1,5 +1,5 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-import nodeExternals from 'webpack-node-externals';
+import NodeExternals from 'webpack-node-externals';
 
 export default ({
   path,
@@ -22,7 +22,9 @@ export default ({
     devtool: ifDev(false, 'source-map'),
     performance: false,
     entry: {
-      server: ['babel-polyfill', path.resolve(appRootDir.get(), './src/server.js')],
+      server: [
+        path.resolve(appRootDir.get(), './src/server.js')
+      ],
     },
     output: {
       ...mainConfig({ isClient: false }).output,
@@ -47,7 +49,7 @@ export default ({
     },
     externals: [
       /^\.\/assets\.json$/,
-      nodeExternals({
+      NodeExternals({
         whitelist: [/\.(css|less|scss|sss)$/i, ...ifProd(['source-map-support/register'], [])],
       }),
     ],
@@ -64,18 +66,16 @@ export default ({
         __DISABLE_SSR__: isAnalyze,
         __DEVTOOLS__: isVerbose,
       }),
-      new CopyWebpackPlugin([
-        {
-          from: path.resolve(appRootDir.get(), './statics'),
-          to: path.resolve(appRootDir.get(), './public/assets'),
-          flatten: false,
-        },
-        // Activate when AMP ready
-        // {
-        //   from: path.resolve(appRootDir.get(), './src/amp/views'),
-        //   to: path.resolve(appRootDir.get(), './public/amp/views'),
-        // }
-      ]),
+      // new CopyWebpackPlugin([
+      //   {
+      //     from: path.resolve(appRootDir.get(), './statics'),
+      //     to: path.resolve(appRootDir.get(), './public/assets'),
+      //   },
+      //   {
+      //     from: path.resolve(appRootDir.get(), './src/amp/views'),
+      //     to: path.resolve(appRootDir.get(), './public/amp/views'),
+      //   }
+      // ]),
       ...ifProd([new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })], []),
       ...ifDev(
         [

@@ -20,6 +20,7 @@ const ifProd = ifElse(isProd);
 const ifAnalyze = ifElse(isAnalyze);
 
 const mainConfig = ({ isClient }) => ({
+  mode: config.env,
   output: {
     publicPath: config.build.path,
     pathinfo: isVerbose,
@@ -108,7 +109,7 @@ const mainConfig = ({ isClient }) => ({
     ],
   },
   plugins: [
-    [new webpack.ProgressPlugin({ handler: progressHandler })],
+    new webpack.ProgressPlugin({ handler: progressHandler }),
     new webpack.DefinePlugin({
       globals: JSON.stringify(config),
     }),
