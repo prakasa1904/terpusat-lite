@@ -1,4 +1,5 @@
-import React from 'react';
 import Dashboard from './Dashboard';
+import Members from './Members';
+import NotFound from './NotFound';
 
-export { Dashboard };
+export { Dashboard, Members, NotFound };

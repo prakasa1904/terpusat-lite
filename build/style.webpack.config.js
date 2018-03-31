@@ -22,10 +22,7 @@ export default ({ isClient }) => [
   {
     loader: 'less-loader',
     options: {
-      paths: [
-        path.resolve(appRootDir.get(), './public/assets/styles'),
-        path.resolve(appRootDir.get(), 'node_modules'),
-      ],
+      paths: [path.resolve(appRootDir.get(), './public/assets/styles'), path.resolve(appRootDir.get(), 'node_modules')],
     },
   },
 ];

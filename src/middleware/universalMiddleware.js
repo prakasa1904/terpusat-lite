@@ -3,20 +3,16 @@ import { renderToString } from 'react-dom/server'
 import { matchPath, StaticRouter } from 'react-router-dom';
 
 import renderFullPage from './../html';
-import routes from './../routes';
+import App from './../App';
 
 export default (req, res, next) => {
   const context = {}
-
-  console.log('=========== req.url ===========')
-  console.log(req.url)
-  console.log('=========== req.url ===========')
   
   const html = renderToString(
     <StaticRouter context={context} location={req.url} >
-      <App pokemon={pokemon} />
+      <App context={req} />
     </StaticRouter>
   );
 
-  return res.status(200).send(renderFullPage(html, pokemon));
+  return res.status(200).type('html').send(renderFullPage(html));
 };

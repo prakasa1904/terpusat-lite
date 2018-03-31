@@ -20,11 +20,9 @@ export default ({
     name: 'server',
     target: 'node',
     devtool: ifDev(false, 'source-map'),
-    performance: false,
+    performance: isProd,
     entry: {
-      server: [
-        path.resolve(appRootDir.get(), './src/server.js')
-      ],
+      server: [path.resolve(appRootDir.get(), './src/server.js')],
     },
     output: {
       ...mainConfig({ isClient: false }).output,
@@ -55,9 +53,6 @@ export default ({
     ],
     optimization: {
       minimize: isProd,
-      runtimeChunk: {
-        name: 'server-terpusat'
-      },
     },
     plugins: [
       ...mainConfig({ isClient: false }).plugins,
@@ -96,5 +91,5 @@ export default ({
       __filename: false,
       __dirname: false,
     },
-  }
-}
+  };
+};

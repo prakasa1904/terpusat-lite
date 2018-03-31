@@ -1,24 +1,19 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch
-} from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { Dashboard } from './routes';
+import { Dashboard, Members, NotFound } from './routes';
 
-export default (props) => {
-  const { pokemon } = props;
-
+const app = () => {
   return (
     <div>
-      Your SSR React Router Node App initialised with data!
       <Switch>
         <Route path="/" exact component={Dashboard} />
-        {/* <Route path="/pokemon" exact render={() => (<Redirect to="/pokemon/ability/telepathy" />)} />
-                <Route path="/pokemon/ability/:ability" render={(location) => (<List pokemon={pokemon.list} location={location} />)} /> */}
+        <Route path="/members" render={(location) => (<Members location={location} />)} />
+        <Route path="/redirect" exact render={() => (<Redirect to="/" />)} />
+        <Route path="*" component={NotFound}/>
       </Switch>
     </div>
-  )
+  );
 };
+
+export default app;

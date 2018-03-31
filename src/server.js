@@ -7,15 +7,22 @@ import winston from 'winston';
 import Loadable from 'react-loadable';
 
 import initMiddleware from './middleware/initialMiddleware';
-//import authMiddleware from './middleware/auth';
 import universalMiddleware from './middleware/universalMiddleware';
 
 winston.info('Starting server...');
 
 const __PROD__ = config.isProd;
-const app = express(); initMiddleware({ app, express });
+const app = express();
+initMiddleware({ app, express });
 
+// Server Routing
 app.use(universalMiddleware);
+
+app.use((err, req, res) => {
+  console.log(err);
+
+  return res.send(!__PROD__ && err ? err : 'Ooopss.. We could not process request');
+});
 
 process.on('SIGINT', () => {
   winston.info('Received SIGINT exiting');

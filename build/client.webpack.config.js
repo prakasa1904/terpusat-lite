@@ -39,7 +39,7 @@ export default ({
     },
     output: {
       ...mainConfig({ isClient: true }).output,
-      path: path.resolve(appRootDir.get(), './public/'),
+      path: path.resolve(appRootDir.get(), './public/static/'),
       filename: ifDev('[name].js', '[name].[chunkhash].js'),
       chunkFilename: ifDev('chunk.[name].js', 'chunk.[name].[chunkhash].js'),
       crossOriginLoading: 'anonymous',
@@ -73,19 +73,19 @@ export default ({
     optimization: {
       minimize: isProd,
       runtimeChunk: {
-        name: 'terpusat'
+        name: 'terpusat',
       },
       splitChunks: {
         cacheGroups: {
           default: false,
           commons: {
             test: /node_modules/,
-            name: "vendors",
-            chunks: "initial",
-            minSize: 1
-          }
-        }
-      }
+            name: 'vendors',
+            chunks: 'initial',
+            minSize: 1,
+          },
+        },
+      },
     },
     plugins: [
       ...mainConfig({ isClient: true }).plugins,
@@ -145,5 +145,5 @@ export default ({
       net: 'empty',
       tls: 'empty',
     },
-  }
-}
+  };
+};

@@ -133,9 +133,6 @@ const pushIntoWebpackConfig = {
   styleConfig,
 };
 
-const configs = [
-  clientWebpackConfig(pushIntoWebpackConfig), 
-  serverWebpackConfig(pushIntoWebpackConfig)
-];
+const configs = [clientWebpackConfig(pushIntoWebpackConfig), serverWebpackConfig(pushIntoWebpackConfig)];
 
 export default configs;

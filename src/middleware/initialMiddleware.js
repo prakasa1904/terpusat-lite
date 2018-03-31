@@ -10,11 +10,11 @@ import session from 'express-session';
 import useragent from 'express-useragent';
 import winston from 'winston';
 
-export const dnsPrefetchControl = (control) => {
+export const dnsPrefetchControl = control => {
   return (req, res, next) => {
     res.setHeader('X-DNS-Prefetch-Control', control);
     next();
-  }
+  };
 };
 
 export default ({ app, express }) => {
@@ -42,7 +42,7 @@ export default ({ app, express }) => {
   }
 
   if (!__PROD__) {
-    app.use(express.static(pathResolve(appRootDir.get(), './build/static')));
+    app.use(express.static(pathResolve(appRootDir.get(), './public/static')));
   }
 
   // Configure Default Logger

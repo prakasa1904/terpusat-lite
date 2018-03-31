@@ -1,13 +1,22 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
+import createHistory from 'history/createBrowserHistory';
+//import { BrowserRouter as Router } from 'react-router-dom';
 
+import configureStore from './redux/configure';
 import App from './App';
 
-const MOUNT_NODE = document.getElementById('terpusat');
+// initial state and routing
+const history = createHistory();
+const store = configureStore(history);
 
-render((
-    <Router>
-        <App pokemon={window.__PRELOADED_STATE__} />
-    </Router>), MOUNT_NODE
+render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('terpusat'),
 );
