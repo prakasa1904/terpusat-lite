@@ -2,6 +2,7 @@ import { resolve as pathResolve } from 'path';
 import appRootDir from 'app-root-dir';
 import bodyParser from 'body-parser';
 import config from 'config';
+import cors from 'cors';
 import connectRedis from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import favicon from 'serve-favicon';
@@ -33,6 +34,7 @@ export default ({ app, express }) => {
   app.use(cookieParser(config.app.environment.secret));
   app.use(session(sessionConfig));
   app.use(useragent.express());
+  app.use(cors());
 
   if (__PROD__) {
     app.set('trust proxy', 1);

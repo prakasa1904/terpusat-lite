@@ -1,9 +1,10 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate } from 'react-dom';
+import { match } from 'react-router';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-//import { BrowserRouter as Router } from 'react-router-dom';
 
 import configureStore from './redux/configure';
 import App from './App';
@@ -12,11 +13,26 @@ import App from './App';
 const history = createHistory();
 const store = configureStore(history);
 
-render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
-  document.getElementById('terpusat'),
-);
+const render = () => {
+  hydrate(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('terpusat'),
+  );
+};
+
+Loadable.preloadReady().then(() => {
+  render();
+});
+
+if (module.hot) {
+  // Accept changes to this file for hot reloading.
+  module.hot.accept('./client.js');
+  // Any changes to our App will cause a hotload re-render.
+  module.hot.accept('./App', () => {
+    render(require('./App'));
+  });
+}
